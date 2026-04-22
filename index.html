@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compliance Check — Nacia Forge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:    #06B188;
+      --teal-dk: #049470;
+      --charcoal:#333030;
+      --light:   #f5faf8;
+      --border:  #d4ede7;
+      --error:   #c0392b;
+      --white:   #ffffff;
+      --label:   #555050;
+      --radius:  6px;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--light);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--teal);
+      color: var(--white);
+      padding: 22px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img {
+      height: 42px;
+      border-radius: 4px;
+    }
+    .header-text .wordmark {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+    .header-text .tagline {
+      font-size: 0.78rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.88;
+      margin-top: 3px;
+    }
+
+    /* ── HERO BAND ── */
+    .hero {
+      background: var(--charcoal);
+      color: var(--white);
+      text-align: center;
+      padding: 36px 24px 28px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .hero h1 em { color: var(--teal); font-style: normal; }
+    .hero p {
+      margin-top: 10px;
+      font-size: 0.93rem;
+      font-weight: 300;
+      opacity: 0.82;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 700px;
+      width: 100%;
+      margin: 36px auto 48px;
+      padding: 0 20px;
+    }
+
+    /* ── SECTION CARD ── */
+    .section-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 22px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    /* ── FORM FIELDS ── */
+    .field { margin-bottom: 20px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--label);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 7px;
+    }
+    label .req { color: var(--teal); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      background: var(--white);
+      transition: border-color 0.18s;
+      appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(6,177,136,0.12);
+    }
+    textarea { min-height: 90px; resize: vertical; }
+
+    /* ── RADIO / CHECKBOX GROUPS ── */
+    .radio-group, .check-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .radio-group label, .check-group label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.93rem;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--charcoal);
+      cursor: pointer;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .radio-group label:hover, .check-group label:hover {
+      border-color: var(--teal);
+      background: var(--light);
+    }
+    .radio-group input[type="radio"],
+    .check-group input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      accent-color: var(--teal);
+    }
+    .radio-group label.selected,
+    .check-group label.selected {
+      border-color: var(--teal);
+      background: rgba(6,177,136,0.06);
+    }
+
+    /* ── FILE UPLOAD ── */
+    .file-drop {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      position: relative;
+    }
+    .file-drop:hover, .file-drop.dragover {
+      border-color: var(--teal);
+      background: rgba(6,177,136,0.04);
+    }
+    .file-drop input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .file-drop .upload-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .file-drop .upload-label {
+      font-size: 0.9rem;
+      color: var(--label);
+    }
+    .file-drop .upload-label strong { color: var(--teal); }
+    .file-drop .upload-hint {
+      font-size: 0.78rem;
+      color: #999;
+      margin-top: 5px;
+    }
+    .file-name {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--teal);
+      font-weight: 700;
+      display: none;
+    }
+
+    /* ── CONFIDENTIALITY NOTICE ── */
+    .confidentiality {
+      background: rgba(6,177,136,0.06);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--teal);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 0.85rem;
+      color: var(--label);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .confidentiality strong { color: var(--charcoal); }
+
+    /* ── CHECKBOX AGREEMENT ── */
+    .agree-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    .agree-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--teal);
+    }
+    .agree-row span {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--charcoal);
+    }
+
+    /* ── SUBMIT ── */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--teal);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: var(--teal-dk); }
+    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+    .submit-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 10px;
+    }
+
+    /* ── STATE MESSAGES ── */
+    #state-success, #state-error { display: none; }
+
+    .state-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .state-box .icon { font-size: 2.4rem; margin-bottom: 14px; }
+    .state-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+    .state-box p { font-size: 0.95rem; color: var(--label); line-height: 1.6; }
+    .state-box.error h2 { color: var(--error); }
+
+    /* ── FIELD ERROR ── */
+    .field-error {
+      font-size: 0.78rem;
+      color: var(--error);
+      margin-top: 5px;
+      display: none;
+    }
+    .field.invalid input,
+    .field.invalid select,
+    .field.invalid textarea {
+      border-color: var(--error);
+    }
+    .field.invalid .field-error { display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--teal);
+      color: var(--white);
+      text-align: center;
+      padding: 18px 24px;
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      opacity: 0.95;
+    }
+    footer a { color: var(--white); opacity: 0.8; }
+
+    @media (max-width: 480px) {
+      .section-card { padding: 20px 18px; }
+      header { padding: 16px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <img src="https://storage.tally.so/ae34d441-54a6-4dbf-ba51-c679a07f8817/Nacia-Forge_-Logo.jpeg" alt="Nacia Forge" />
+  <div class="header-text">
+    <div class="wordmark">NACIA FORGE</div>
+    <div class="tagline">Precision RFP Compliance Auditing</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>RFP <em>Compliance Check</em></h1>
+  <p>Submit your RFP document and receive a three-pass AI compliance matrix — mandatory requirements, risk flags, and action items — delivered to your inbox.</p>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- SUCCESS STATE -->
+  <div id="state-success">
+    <div class="state-box">
+      <div class="icon">✅</div>
+      <h2>Submission Received</h2>
+      <p>Your RFP is being processed. Your compliance matrix will be delivered to your inbox within 5 minutes.<br><br>
+      If you don't receive it, check your spam folder or reply to any previous Nacia Forge email.</p>
+    </div>
+  </div>
+
+  <!-- ERROR STATE -->
+  <div id="state-error">
+    <div class="state-box error">
+      <div class="icon">⚠️</div>
+      <h2>Submission Failed</h2>
+      <p>We couldn't process your submission. Please email <a href="mailto:stephcal528@gmail.com">stephcal528@gmail.com</a> directly with your RFP attached.</p>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <form id="rfp-form" novalidate>
+
+    <!-- SECTION 1 — TENDER CONTEXT -->
+    <div class="section-card">
+      <div class="section-title">Section 1 — Tender Context</div>
+
+      <div class="field" id="f-solicitation">
+        <label for="solicitation">Solicitation Number <span class="req">*</span></label>
+        <input type="text" id="solicitation" name="solicitation" placeholder="e.g. EN578-19ENT/A" />
+        <div class="field-error">Solicitation number is required.</div>
+      </div>
+
+      <div class="field" id="f-tender-title">
+        <label for="tender-title">Tender Title <span class="req">*</span></label>
+        <input type="text" id="tender-title" name="tender-title" placeholder="e.g. Professional Services — IT Advisory" />
+        <div class="field-error">Tender title is required.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 — CLIENT IDENTITY -->
+    <div class="section-card">
+      <div class="section-title">Section 2 — Client Identity</div>
+
+      <div class="field" id="f-full-name">
+        <label for="full-name">Full Name <span class="req">*</span></label>
+        <input type="text" id="full-name" name="full-name" placeholder="Your full name" />
+        <div class="field-error">Full name is required.</div>
+      </div>
+
+      <div class="field" id="f-email">
+        <label for="email">Business Email <span class="req">*</span></label>
+        <input type="email" id="email" name="email" placeholder="you@yourcompany.com" />
+        <div class="field-error">A valid email address is required.</div>
+      </div>
+
+      <div class="field">
+        <label for="company">Company Name</label>
+        <input type="text" id="company" name="company" placeholder="Your organization" />
+      </div>
+
+      <div class="field" id="f-clearance">
+        <label for="clearance">Security Clearance Level <span class="req">*</span></label>
+        <select id="clearance" name="clearance">
+          <option value="" disabled selected>Select clearance level…</option>
+          <option value="None">None</option>
+          <option value="Reliability">Reliability</option>
+          <option value="Secret">Secret</option>
+          <option value="Top Secret">Top Secret</option>
+        </select>
+        <div class="field-error">Please select your security clearance level.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 — QUALIFYING QUESTIONS -->
+    <div class="section-card">
+      <div class="section-title">Section 3 — Qualifying Questions</div>
+
+      <div class="field" id="f-ibd">
+        <label>Is your business registered in the Indigenous Business Directory (IBD)? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="ibd" value="Yes" /> Yes — IBD registered</label>
+          <label><input type="radio" name="ibd" value="No" /> No — not registered</label>
+        </div>
+        <div class="field-error">Please select an option.</div>
+      </div>
+
+      <div class="field" id="f-bid-stage">
+        <label>Stage in Bid Process <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="bid-stage" value="Just starting" /> Just starting</label>
+          <label><input type="radio" name="bid-stage" value="Have a draft - need a gap check" /> Have a draft — need a gap check</label>
+          <label><input type="radio" name="bid-stage" value="Nearly done - final review" /> Nearly done — final review</label>
+          <label><input type="radio" name="bid-stage" value="Already submitted" /> Already submitted</label>
+        </div>
+        <div class="field-error">Please select your bid stage.</div>
+      </div>
+
+      <div class="field" id="f-audit-tier">
+        <label>Audit Tier <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="audit-tier" value="Pulse Check - AI compliance matrix" /> <div><strong>Pulse Check</strong> — AI compliance matrix</div></label>
+          <label><input type="radio" name="audit-tier" value="Expert Audit - AI + human review" /> <div><strong>Expert Audit</strong> — AI + human review</div></label>
+          <label><input type="radio" name="audit-tier" value="Not sure yet" /> Not sure yet</label>
+        </div>
+        <div class="field-error">Please select an audit tier.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 — DOCUMENT UPLOAD -->
+    <div class="section-card">
+      <div class="section-title">Section 4 — Document Upload</div>
+
+      <div class="field" id="f-rfp-doc">
+        <label>RFP Document <span class="req">*</span></label>
+        <div class="file-drop" id="rfp-drop">
+          <input type="file" id="rfp-file" name="rfp-file" accept=".pdf,.doc,.docx" />
+          <div class="upload-icon">📄</div>
+          <div class="upload-label"><strong>Click to upload</strong> or drag and drop</div>
+          <div class="upload-hint">PDF, DOC, DOCX · Max 10 MB</div>
+        </div>
+        <div class="file-name" id="rfp-file-name"></div>
+        <div class="field-error">Please upload your RFP document.</div>
+      </div>
+
+      <div class="field">
+        <label>Proposal Draft <span style="font-weight:300;text-transform:none;letter-spacing:0;">(optional)</span></label>
+        <div class="file-drop" id="proposal-drop">
+          <input type="file" id="proposal-file" name="proposal-file" accept=".pdf,.doc,.docx" />
+          <div class="upload-icon">📝</div>
+          <div class="upload-label"><strong>Click to upload</strong> or drag and drop</div>
+          <div class="upload-hint">PDF, DOC, DOCX · Max 10 MB</div>
+        </div>
+        <div class="file-name" id="proposal-file-name"></div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 — FINAL DETAILS -->
+    <div class="section-card">
+      <div class="section-title">Section 5 — Final Details</div>
+
+      <div class="field">
+        <label for="focus">Specific Focus Areas <span style="font-weight:300;text-transform:none;letter-spacing:0;">(optional)</span></label>
+        <textarea id="focus" name="focus" placeholder="e.g. Security clearance requirements, Indigenous subcontracting clauses, insurance minimums…"></textarea>
+      </div>
+
+      <div class="confidentiality">
+        <strong>Confidentiality:</strong> Your documents are processed securely and never used for AI training.
+        All submissions are handled in strict confidence.
+      </div>
+
+      <div class="field" id="f-agree">
+        <label class="agree-row">
+          <input type="checkbox" id="agree" name="agree" />
+          <span>I confirm my documents are processed confidentially and not used for AI training. <span class="req">*</span></span>
+        </label>
+        <div class="field-error">You must confirm to proceed.</div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <button type="submit" class="submit-btn" id="submit-btn">Submit for Compliance Check →</button>
+    <div class="submit-note">Your matrix will be delivered within 5 minutes · Secure upload</div>
+
+  </form>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 Nacia Forge &nbsp;·&nbsp; naciaforge.com &nbsp;·&nbsp; Precision RFP Compliance Auditing
+</footer>
+
+<script>
+  // ── CONFIG ──
+  // Replace with your Render webhook URL
+  const WEBHOOK_URL = 'https://YOUR-RENDER-APP.onrender.com/webhook/rfp-intake';
+
+  // ── FILE DROP UI ──
+  function setupFileDrop(dropId, inputId, nameId) {
+    const drop = document.getElementById(dropId);
+    const input = document.getElementById(inputId);
+    const nameEl = document.getElementById(nameId);
+
+    input.addEventListener('change', () => {
+      if (input.files[0]) {
+        nameEl.textContent = '✓ ' + input.files[0].name;
+        nameEl.style.display = 'block';
+        drop.style.borderColor = 'var(--teal)';
+      }
+    });
+
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+    drop.addEventListener('drop', e => {
+      e.preventDefault();
+      drop.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        nameEl.textContent = '✓ ' + file.name;
+        nameEl.style.display = 'block';
+        drop.style.borderColor = 'var(--teal)';
+      }
+    });
+  }
+
+  setupFileDrop('rfp-drop', 'rfp-file', 'rfp-file-name');
+  setupFileDrop('proposal-drop', 'proposal-file', 'proposal-file-name');
+
+  // ── RADIO HIGHLIGHT ──
+  document.querySelectorAll('.radio-group').forEach(group => {
+    group.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        group.querySelectorAll('label').forEach(l => l.classList.remove('selected'));
+        radio.closest('label').classList.add('selected');
+      });
+    });
+  });
+
+  // ── VALIDATION ──
+  function validateField(fieldId, condition) {
+    const el = document.getElementById(fieldId);
+    if (!el) return condition;
+    if (condition) {
+      el.classList.remove('invalid');
+    } else {
+      el.classList.add('invalid');
+    }
+    return condition;
+  }
+
+  function getRadioValue(name) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    return checked ? checked.value : '';
+  }
+
+  // ── SUBMIT ──
+  document.getElementById('rfp-form').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const solicitation = document.getElementById('solicitation').value.trim();
+    const tenderTitle  = document.getElementById('tender-title').value.trim();
+    const fullName     = document.getElementById('full-name').value.trim();
+    const email        = document.getElementById('email').value.trim();
+    const clearance    = document.getElementById('clearance').value;
+    const ibd          = getRadioValue('ibd');
+    const bidStage     = getRadioValue('bid-stage');
+    const auditTier    = getRadioValue('audit-tier');
+    const rfpFile      = document.getElementById('rfp-file').files[0];
+    const agreed       = document.getElementById('agree').checked;
+
+    let valid = true;
+    valid = validateField('f-solicitation', !!solicitation) && valid;
+    valid = validateField('f-tender-title', !!tenderTitle) && valid;
+    valid = validateField('f-full-name', !!fullName) && valid;
+    valid = validateField('f-email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) && valid;
+    valid = validateField('f-clearance', !!clearance) && valid;
+    valid = validateField('f-ibd', !!ibd) && valid;
+    valid = validateField('f-bid-stage', !!bidStage) && valid;
+    valid = validateField('f-audit-tier', !!auditTier) && valid;
+    valid = validateField('f-rfp-doc', !!rfpFile) && valid;
+    valid = validateField('f-agree', agreed) && valid;
+
+    if (!valid) {
+      document.querySelector('.field.invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    try {
+      const formData = new FormData();
+      formData.append('solicitation_number', solicitation);
+      formData.append('tender_title', tenderTitle);
+      formData.append('full_name', fullName);
+      formData.append('business_email', email);
+      formData.append('company_name', document.getElementById('company').value.trim());
+      formData.append('security_clearance', clearance);
+      formData.append('ibd_registration', ibd);
+      formData.append('bid_stage', bidStage);
+      formData.append('audit_tier', auditTier);
+      formData.append('rfp_document', rfpFile);
+      formData.append('focus_areas', document.getElementById('focus').value.trim());
+
+      const proposalFile = document.getElementById('proposal-file').files[0];
+      if (proposalFile) formData.append('proposal_draft', proposalFile);
+
+      const res = await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
+
+      if (res.ok) {
+        document.getElementById('rfp-form').style.display = 'none';
+        document.getElementById('state-success').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error(`Server responded ${res.status}`);
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById('rfp-form').style.display = 'none';
+      document.getElementById('state-error').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+</script>
+</body>
+</html>
