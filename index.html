@@ -539,8 +539,7 @@
 
 <script>
   // ── CONFIG ──
-  // Replace with your Render webhook URL
-  const WEBHOOK_URL = 'https://nacia-forge-pipeline.onrender.com/webhook/rfp-intake';
+  const WEBHOOK_URL = 'https://rfp-compliance-pipeline.onrender.com/webhook/rfp-intake';
 
   // ── FILE DROP UI ──
   function setupFileDrop(dropId, inputId, nameId) {
@@ -656,7 +655,7 @@
       const proposalFile = document.getElementById('proposal-file').files[0];
       if (proposalFile) formData.append('proposal_draft', proposalFile);
 
-      const res = await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
+      const res = await fetch(WEBHOOK_URL, { method: 'POST', body: formData, mode: 'cors' });
 
       if (res.ok) {
         document.getElementById('rfp-form').style.display = 'none';
