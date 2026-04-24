@@ -188,6 +188,71 @@
       background: rgba(6,177,136,0.06);
     }
 
+    /* ── TIER CARDS ── */
+    .tier-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tier-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      position: relative;
+    }
+    .tier-card:hover {
+      border-color: var(--teal);
+      background: var(--light);
+    }
+    .tier-card.selected {
+      border-color: var(--teal);
+      background: rgba(6,177,136,0.06);
+    }
+    .tier-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .tier-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .tier-name {
+      font-size: 0.97rem;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+    .tier-price {
+      font-size: 0.97rem;
+      font-weight: 700;
+      color: var(--teal);
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+    .tier-desc {
+      font-size: 0.83rem;
+      color: var(--label);
+      line-height: 1.5;
+    }
+    .tier-divider {
+      border: none;
+      border-top: 1px dashed var(--border);
+      margin: 8px 0;
+    }
+    .tier-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+
     /* ── FILE UPLOAD ── */
     .file-drop {
       border: 2px dashed var(--border);
@@ -326,6 +391,10 @@
       border-color: var(--error);
     }
     .field.invalid .field-error { display: block; }
+    .field.invalid .tier-group .tier-card,
+    .field.invalid .radio-group label {
+      border-color: var(--error);
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -371,7 +440,7 @@
     <div class="state-box">
       <div class="icon">✅</div>
       <h2>Submission Received</h2>
-      <p>Your RFP is being processed. Your compliance matrix will be delivered to your inbox within 5 minutes.<br><br>
+      <p>Your RFP is being processed. Your compliance matrix will be delivered to your inbox within 24–48 hours.<br><br>
       If you don't receive it, check your spam folder or reply to any previous Nacia Forge email.</p>
     </div>
   </div>
@@ -462,21 +531,78 @@
         </div>
         <div class="field-error">Please select your bid stage.</div>
       </div>
+    </div>
 
-      <div class="field" id="f-audit-tier">
-        <label>Audit Tier <span class="req">*</span></label>
-        <div class="radio-group">
-          <label><input type="radio" name="audit-tier" value="Pulse Check - AI compliance matrix" /> <div><strong>Pulse Check</strong> — AI compliance matrix</div></label>
-          <label><input type="radio" name="audit-tier" value="Expert Audit - AI + human review" /> <div><strong>Expert Audit</strong> — AI + human review</div></label>
-          <label><input type="radio" name="audit-tier" value="Not sure yet" /> Not sure yet</label>
+    <!-- SECTION 4 — SERVICE SELECTION -->
+    <div class="section-card">
+      <div class="section-title">Section 4 — Select Your Service</div>
+
+      <div class="field" id="f-tier">
+        <label>Service <span class="req">*</span></label>
+
+        <div class="tier-group">
+
+          <!-- CORE SERVICES LABEL -->
+          <div class="tier-section-label">Core Services</div>
+
+          <div class="tier-card" id="tier-card-audit" onclick="selectTier('audit', this)">
+            <input type="radio" name="tier" value="audit" id="tier-audit" />
+            <div class="tier-card-header">
+              <span class="tier-name">Compliance Audit</span>
+              <span class="tier-price">$2,000 CAD</span>
+            </div>
+            <div class="tier-desc">Three-pass AI analysis. Every mandatory requirement extracted, classified by risk, and prioritized. Red flag items flagged. Immediate action plan with deadlines. PDF delivered within 24–48 hours.</div>
+          </div>
+
+          <div class="tier-card" id="tier-card-advisory" onclick="selectTier('advisory', this)">
+            <input type="radio" name="tier" value="advisory" id="tier-advisory" />
+            <div class="tier-card-header">
+              <span class="tier-name">Audit + Advisory Call</span>
+              <span class="tier-price">$2,500 CAD</span>
+            </div>
+            <div class="tier-desc">Full compliance audit plus a 30-minute expert walkthrough. Red flag items explained in plain language, prioritized next steps, and direct Q&amp;A with a procurement specialist.</div>
+          </div>
+
+          <hr class="tier-divider" />
+
+          <!-- PREMIUM SERVICES LABEL -->
+          <div class="tier-section-label">Premium — Scoring &amp; Bid Writing</div>
+
+          <div class="tier-card" id="tier-card-scoring" onclick="selectTier('scoring', this)">
+            <input type="radio" name="tier" value="scoring" id="tier-scoring" />
+            <div class="tier-card-header">
+              <span class="tier-name">Audit + Scoring Optimization</span>
+              <span class="tier-price">$3,500 CAD</span>
+            </div>
+            <div class="tier-desc">Full compliance audit plus a criterion-by-criterion guide to maximizing your technical score. Includes score projection vs. minimum passmark and gap analysis against your profile.</div>
+          </div>
+
+          <div class="tier-card" id="tier-card-trg" onclick="selectTier('trg', this)">
+            <input type="radio" name="tier" value="trg" id="tier-trg" />
+            <div class="tier-card-header">
+              <span class="tier-name">Audit + Technical Response Guide</span>
+              <span class="tier-price">$3,500 CAD</span>
+            </div>
+            <div class="tier-desc">Full compliance audit plus a complete blueprint for writing your Section I Technical Bid. Section-by-section outline, evaluator language guide, compliance cross-reference table, and write-this/not-this examples.</div>
+          </div>
+
+          <div class="tier-card" id="tier-card-complete" onclick="selectTier('complete', this)">
+            <input type="radio" name="tier" value="complete" id="tier-complete" />
+            <div class="tier-card-header">
+              <span class="tier-name">Complete Package</span>
+              <span class="tier-price">$4,000 CAD</span>
+            </div>
+            <div class="tier-desc">Everything. Full compliance audit, scoring optimization report, and technical response guide — all in one delivery. The complete intelligence package for a bid you intend to win.</div>
+          </div>
+
         </div>
-        <div class="field-error">Please select an audit tier.</div>
+        <div class="field-error">Please select a service.</div>
       </div>
     </div>
 
-    <!-- SECTION 4 — DOCUMENT UPLOAD -->
+    <!-- SECTION 5 — DOCUMENT UPLOAD -->
     <div class="section-card">
-      <div class="section-title">Section 4 — Document Upload</div>
+      <div class="section-title">Section 5 — Document Upload</div>
 
       <div class="field" id="f-rfp-doc">
         <label>RFP Document <span class="req">*</span></label>
@@ -502,9 +628,9 @@
       </div>
     </div>
 
-    <!-- SECTION 5 — FINAL DETAILS -->
+    <!-- SECTION 6 — FINAL DETAILS -->
     <div class="section-card">
-      <div class="section-title">Section 5 — Final Details</div>
+      <div class="section-title">Section 6 — Final Details</div>
 
       <div class="field">
         <label for="focus">Specific Focus Areas <span style="font-weight:300;text-transform:none;letter-spacing:0;">(optional)</span></label>
@@ -526,8 +652,8 @@
     </div>
 
     <!-- SUBMIT -->
-    <button type="submit" class="submit-btn" id="submit-btn">Submit for Compliance Check →</button>
-    <div class="submit-note">Your matrix will be delivered within 5 minutes · Secure upload</div>
+    <button type="submit" class="submit-btn" id="submit-btn">Proceed to Payment →</button>
+    <div class="submit-note">You will be redirected to a secure Stripe checkout · Stripe-protected payment</div>
 
   </form>
 </main>
@@ -541,9 +667,26 @@
   // ── CONFIG ──
   const WEBHOOK_URL = 'https://rfp-compliance-pipeline.onrender.com/webhook/rfp-intake';
 
+  // ── TIER SELECTION ──
+  function selectTier(slug, cardEl) {
+    // Deselect all cards
+    document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
+    // Select clicked card
+    cardEl.classList.add('selected');
+    // Check the hidden radio
+    document.getElementById('tier-' + slug).checked = true;
+    // Clear validation error if present
+    document.getElementById('f-tier').classList.remove('invalid');
+  }
+
+  function getSelectedTier() {
+    const checked = document.querySelector('input[name="tier"]:checked');
+    return checked ? checked.value : '';
+  }
+
   // ── FILE DROP UI ──
   function setupFileDrop(dropId, inputId, nameId) {
-    const drop = document.getElementById(dropId);
+    const drop  = document.getElementById(dropId);
     const input = document.getElementById(inputId);
     const nameEl = document.getElementById(nameId);
 
@@ -572,7 +715,7 @@
     });
   }
 
-  setupFileDrop('rfp-drop', 'rfp-file', 'rfp-file-name');
+  setupFileDrop('rfp-drop',      'rfp-file',      'rfp-file-name');
   setupFileDrop('proposal-drop', 'proposal-file', 'proposal-file-name');
 
   // ── RADIO HIGHLIGHT ──
@@ -613,21 +756,21 @@
     const clearance    = document.getElementById('clearance').value;
     const ibd          = getRadioValue('ibd');
     const bidStage     = getRadioValue('bid-stage');
-    const auditTier    = getRadioValue('audit-tier');
+    const tier         = getSelectedTier();
     const rfpFile      = document.getElementById('rfp-file').files[0];
     const agreed       = document.getElementById('agree').checked;
 
     let valid = true;
     valid = validateField('f-solicitation', !!solicitation) && valid;
-    valid = validateField('f-tender-title', !!tenderTitle) && valid;
-    valid = validateField('f-full-name', !!fullName) && valid;
+    valid = validateField('f-tender-title',  !!tenderTitle)  && valid;
+    valid = validateField('f-full-name',     !!fullName)     && valid;
     valid = validateField('f-email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) && valid;
-    valid = validateField('f-clearance', !!clearance) && valid;
-    valid = validateField('f-ibd', !!ibd) && valid;
-    valid = validateField('f-bid-stage', !!bidStage) && valid;
-    valid = validateField('f-audit-tier', !!auditTier) && valid;
-    valid = validateField('f-rfp-doc', !!rfpFile) && valid;
-    valid = validateField('f-agree', agreed) && valid;
+    valid = validateField('f-clearance',     !!clearance)    && valid;
+    valid = validateField('f-ibd',           !!ibd)          && valid;
+    valid = validateField('f-bid-stage',     !!bidStage)     && valid;
+    valid = validateField('f-tier',          !!tier)         && valid;
+    valid = validateField('f-rfp-doc',       !!rfpFile)      && valid;
+    valid = validateField('f-agree',         agreed)         && valid;
 
     if (!valid) {
       document.querySelector('.field.invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -635,37 +778,50 @@
     }
 
     const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
+    btn.disabled    = true;
     btn.textContent = 'Submitting…';
 
     try {
       const formData = new FormData();
       formData.append('solicitation_number', solicitation);
-      formData.append('tender_title', tenderTitle);
-      formData.append('full_name', fullName);
-      formData.append('business_email', email);
-      formData.append('company_name', document.getElementById('company').value.trim());
-      formData.append('security_clearance', clearance);
-      formData.append('ibd_registration', ibd);
-      formData.append('bid_stage', bidStage);
-      formData.append('audit_tier', auditTier);
-      formData.append('rfp_document', rfpFile);
-      formData.append('focus_areas', document.getElementById('focus').value.trim());
+      formData.append('tender_title',        tenderTitle);
+      formData.append('full_name',           fullName);
+      formData.append('business_email',      email);
+      formData.append('company_name',        document.getElementById('company').value.trim());
+      formData.append('security_clearance',  clearance);
+      formData.append('ibd_registration',    ibd);
+      formData.append('bid_stage',           bidStage);
+      formData.append('tier',                tier);
+      formData.append('rfp_document',        rfpFile);
+      formData.append('focus_areas',         document.getElementById('focus').value.trim());
 
       const proposalFile = document.getElementById('proposal-file').files[0];
       if (proposalFile) formData.append('proposal_draft', proposalFile);
 
       const res = await fetch(WEBHOOK_URL, { method: 'POST', body: formData, mode: 'cors' });
 
-      if (res.ok) {
+      if (res.status === 202) {
+        // Payment required — redirect to Stripe
+        const data = await res.json();
+        if (data.payment_url) {
+          btn.textContent = 'Redirecting to payment…';
+          window.location.href = data.payment_url;
+        } else {
+          throw new Error('No payment URL returned');
+        }
+      } else if (res.status === 200) {
+        // Direct processing (legacy / no Stripe configured)
         document.getElementById('rfp-form').style.display = 'none';
         document.getElementById('state-success').style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         throw new Error(`Server responded ${res.status}`);
       }
+
     } catch (err) {
       console.error(err);
+      btn.disabled    = false;
+      btn.textContent = 'Proceed to Payment →';
       document.getElementById('rfp-form').style.display = 'none';
       document.getElementById('state-error').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
